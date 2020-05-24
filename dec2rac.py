@@ -3,6 +3,7 @@
 # Libraries
 import re
 from decimal import Decimal
+import math
 
 # Functions
 def findType(inputStr):
@@ -19,14 +20,11 @@ def euclides(num1, num2):
     if (type(num1) != int or type(num2) != int):
         return 'Euclides algorithm only admits integers numbers'
     # Order input numbers
-    if num1 > num2:
-        a, b = num1, num2
-    else:
-        a, b = num2, num1
+    if num1 > num2: a, b = num1, num2
+    else: a, b = num2, num1
     # Algorithm core
-    while b !=0:
-        mod = a%b
-        a, b = b, mod
+    while b != 0:
+        a, b = b, a%b
     # Output
     mcd = a
     mcm = num1*num2//mcd
@@ -43,6 +41,11 @@ def decimalToFraction(s):
     a, b = a//mcd, b//mcd
     return a, b
 
+def mixFraction(a, b):
+    c = a//b
+    r = a%b
+    return c, r
+
 # Main
 if __name__ == "__main__":
     while True:
@@ -50,11 +53,14 @@ if __name__ == "__main__":
             inputStr = input('>> ')
         except EOFError:
             break
-        # Really integer number: (+-[D] | +-[D].) | +-[D].[0] | +- .[0]; [D]: set of digits, [0]: set of zeros
-        r1 = re.compile('^[+-]?[0-9]+[.]?$|^[+-]?[0-9]+[.][0]*$|^[+-]?[.][0]*$')
+        # Integer
+        r1 = re.compile(' ^[+-]?[0-9]+[.]?$ | ^[+-]?[0-9]*[.][0]+$ ')
         
-        # Really float number
-        r2 = re.compile('^[+-]?[0-9]*[.][0-9]+$')   # Like decimal +-.X | +-X.X
+        # Float number
+        r2 = re.compile('^[+-]?[0-9]*[.][0-9]+$')
+
+        # Float number with decimal period
+        r3 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') 
 
         if r1.match(inputStr):
             interInput = int(float(inputStr))
@@ -66,6 +72,13 @@ if __name__ == "__main__":
             flag = "float"
             print('input: {} <<{}>>'.format(interInput, flag))
             a, b = decimalToFraction(inputStr)
-            print('result: {}/{}'.format(a, b))
+            if a>b:
+                c, r = mixFraction(a, b)
+                print('result: {} + {}/{}'.format(c, r, b))
+            else:
+                print('result: {}/{}'.format(a, b))
+        elif r3.match(inputStr):
+            flag = "float with decimal period"
+            print(flag)
         else:
             print('"{}" is not valid number'.format(inputStr))
