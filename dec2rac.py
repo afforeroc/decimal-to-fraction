@@ -6,19 +6,9 @@ from decimal import Decimal
 import math
 
 # Regular expretions to detect type of numbers
-r1 = re.compile('^[+-]?[0-9]+[.]?$|^[+-]?[0-9]*[.][0]+$') # Integer
+r1 = re.compile('^[+-]?[0-9]+[.]?$|^[+-]?[0-9]*[.][0]+$') # Integer number
 r2 = re.compile('^[+-]?[0-9]*[.][0-9]+$') # Float number
-r3 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') # Float number with explicit decimal period
-
-# Functions
-def findType(inputStr):
-    if Decimal(inputStr) % 1 != 0:
-        num = float(inputStr)
-        flag = 'decimal'
-    else:
-        num = int(float(inputStr))
-        flag = 'integer'
-    return num, flag
+r3 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') # Integer or float number with explicit decimal period
 
 def numInterpreter(inputStr):
     if r1.match(inputStr):
