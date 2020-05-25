@@ -43,8 +43,10 @@ def euclides(num1, num2):
     if (type(num1) != int or type(num2) != int):
         return 'Euclides algorithm only admits integers numbers'
     # Order input numbers
-    if num1 > num2: a, b = num1, num2
-    else: a, b = num2, num1
+    if num1 > num2: 
+        a, b = num1, num2
+    else: 
+        a, b = num2, num1
     # Algorithm core
     while b != 0:
         a, b = b, a%b
