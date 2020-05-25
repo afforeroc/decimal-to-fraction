@@ -1,2 +1,2 @@
-# decimal-to-fraction
-Mini-tool that converts one decimal number to a fraction like a/b
+# Decimal to rational converter
+Mini-tool that converts a decimal number to a rational number like a/b, -a/b

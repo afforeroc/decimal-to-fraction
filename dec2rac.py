@@ -5,6 +5,12 @@ import re
 from decimal import Decimal
 import math
 
+# Regular expretions to detect type of numbers
+r1 = re.compile('^[+-]?[0-9]+[.]?$|^[+-]?[0-9]*[.][0]+$') # Integer
+r2 = re.compile('^[+-]?[0-9]*[.][0-9]+$') # Float number
+r3 = re.compile('^[+-]?[0-9]*[.][p][0]+$') # Integer with decimal period [0]+
+r4 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') # Float number with explicit decimal period
+
 # Functions
 def findType(inputStr):
     if Decimal(inputStr) % 1 != 0:
@@ -14,6 +20,34 @@ def findType(inputStr):
         num = int(float(inputStr))
         flag = 'integer'
     return num, flag
+
+def interpreterNum(inputStr):
+    if r1.match(inputStr):
+        interFlag = "integer"
+        interNum = int(float(inputStr))
+    elif r2.match(inputStr): # Float
+        interFlag = "float"
+        interNum = float(inputStr)
+    elif r3.match(inputStr) or r4.match(inputStr):
+        match = re.search(r'([\w]*).([\w]*)p([\w]*)', inputStr)
+        iPart = match.group(1)  # Integer part
+        dPart = match.group(2)  # Decimal no period part
+        dpPart = match.group(3)  # Decimal period part
+        interStrExtra = iPart+'.'+dPart+dpPart
+
+        if int(dPart+dpPart) == 0:
+            interFlag = "integer"
+            interNum = int(float(interStrExtra))
+        elif int(dpPart) == 0:
+            interFlag = "float"
+            interNum = float(interStrExtra)
+        else:
+            interFlag = "float with decimal period"
+            interNum = str(interStrExtra)+5*dpPart+'...'
+
+    interOutput = 'input: {} <<{}>>'.format(interNum, interFlag)
+    
+    return interOutput
 
 def euclides(num1, num2):
     # Check section
@@ -53,32 +87,8 @@ if __name__ == "__main__":
             inputStr = input('>> ')
         except EOFError:
             break
-        # Integer
-        r1 = re.compile(' ^[+-]?[0-9]+[.]?$ | ^[+-]?[0-9]*[.][0]+$ ')
         
-        # Float number
-        r2 = re.compile('^[+-]?[0-9]*[.][0-9]+$')
-
-        # Float number with decimal period
-        r3 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') 
-
-        if r1.match(inputStr):
-            interInput = int(float(inputStr))
-            flag = "integer"
-            print('input: {} <<{}>>'.format(interInput, flag))
-            print('result: {}'.format(interInput))
-        elif r2.match(inputStr):
-            interInput = float(inputStr)
-            flag = "float"
-            print('input: {} <<{}>>'.format(interInput, flag))
-            a, b = decimalToFraction(inputStr)
-            if a>b:
-                c, r = mixFraction(a, b)
-                print('result: {} + {}/{}'.format(c, r, b))
-            else:
-                print('result: {}/{}'.format(a, b))
-        elif r3.match(inputStr):
-            flag = "float with decimal period"
-            print(flag)
+        if r1.match(inputStr) or r2.match(inputStr) or r3.match(inputStr) or r4.match(inputStr): #Valid entry
+            print(interpreterNum(inputStr))
         else:
             print('"{}" is not valid number'.format(inputStr))
