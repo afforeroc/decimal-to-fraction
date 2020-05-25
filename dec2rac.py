@@ -21,7 +21,7 @@ def findType(inputStr):
         flag = 'integer'
     return num, flag
 
-def interpreterNum(inputStr):
+def numInterpreter(inputStr):
     if r1.match(inputStr):
         interFlag = "integer"
         interNum = int(float(inputStr))
@@ -89,6 +89,6 @@ if __name__ == "__main__":
             break
         
         if r1.match(inputStr) or r2.match(inputStr) or r3.match(inputStr) or r4.match(inputStr): #Valid entry
-            print(interpreterNum(inputStr))
+            print(numInterpreter(inputStr))
         else:
             print('"{}" is not valid number'.format(inputStr))
