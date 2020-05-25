@@ -8,8 +8,7 @@ import math
 # Regular expretions to detect type of numbers
 r1 = re.compile('^[+-]?[0-9]+[.]?$|^[+-]?[0-9]*[.][0]+$') # Integer
 r2 = re.compile('^[+-]?[0-9]*[.][0-9]+$') # Float number
-r3 = re.compile('^[+-]?[0-9]*[.][p][0]+$') # Integer with decimal period [0]+
-r4 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') # Float number with explicit decimal period
+r3 = re.compile('^[+-]?[0-9]*[.][0-9]*[p][0-9]+$') # Float number with explicit decimal period
 
 # Functions
 def findType(inputStr):
@@ -28,7 +27,7 @@ def numInterpreter(inputStr):
     elif r2.match(inputStr): # Float
         interFlag = "float"
         interNum = float(inputStr)
-    elif r3.match(inputStr) or r4.match(inputStr):
+    else: #r3.match(inputStr)
         match = re.search(r'([\w]*).([\w]*)p([\w]*)', inputStr)
         iPart = match.group(1)  # Integer part
         dPart = match.group(2)  # Decimal no period part
@@ -88,7 +87,7 @@ if __name__ == "__main__":
         except EOFError:
             break
         
-        if r1.match(inputStr) or r2.match(inputStr) or r3.match(inputStr) or r4.match(inputStr): #Valid entry
+        if r1.match(inputStr) or r2.match(inputStr) or r3.match(inputStr): #Valid entry
             print(numInterpreter(inputStr))
         else:
             print('"{}" is not valid number'.format(inputStr))
